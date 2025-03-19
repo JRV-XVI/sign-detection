@@ -3,7 +3,8 @@ import cv2 as cv
 from matplotlib import pyplot as plt
 
 # Read image in color
-img = cv.imread("Sign6.webp")
+source = "Sign4.jpg"
+img = cv.imread(source)
 assert img is not None, "file could not be read, check with os.path.exists()"
 
 # Convert to HSV
@@ -66,6 +67,7 @@ result_yellow = cv.bitwise_and(img, img, mask=erodeYellow)
 # Find and draw contours for each color
 img_with_boxes = img.copy()
 
+
 def draw_boxes(mask, color):
     contours, _ = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
     for cnt in contours:
@@ -74,19 +76,22 @@ def draw_boxes(mask, color):
             x, y, w, h = cv.boundingRect(cnt)
             cv.rectangle(img_with_boxes, (x, y), (x + w, y + h), color, 5)
 
+
 # Draw boxes for each color
-draw_boxes(erodeRed, (0, 0, 255))      # Red
-draw_boxes(erodeBlue, (255, 0, 0))     # Blue
-draw_boxes(erodeGreen, (0, 255, 0))    # Green
-draw_boxes(erodeYellow, (0, 255, 255)) # Yellow
+draw_boxes(erodeRed, (0, 0, 255))  # Red
+draw_boxes(erodeBlue, (255, 0, 0))  # Blue
+draw_boxes(erodeGreen, (0, 255, 0))  # Green
+draw_boxes(erodeYellow, (0, 255, 255))  # Yellow
 
 # Determine types of signals present
 tipos_senales = []
 threshold_area = 5000  # Minimum number of pixels to consider the presence of color
 
+
 def check_color_presence(result_img):
     gray = cv.cvtColor(result_img, cv.COLOR_BGR2GRAY)
     return np.count_nonzero(gray) > threshold_area
+
 
 if check_color_presence(result_red):
     tipos_senales.append("Restrictiva (Rojo)")
@@ -99,7 +104,7 @@ if check_color_presence(result_green):
 
 print("\nClasificación de señales detectadas:")
 for tipo in tipos_senales:
-  print("- " + tipo)
+    print("- " + tipo)
 
 plt.subplot(2, 3, 1), plt.imshow(cv.cvtColor(img, cv.COLOR_BGR2RGB))
 plt.title("Original"), plt.xticks([]), plt.yticks([])
