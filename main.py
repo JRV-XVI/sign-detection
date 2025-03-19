@@ -3,7 +3,7 @@ import cv2 as cv
 from matplotlib import pyplot as plt
 
 # Read image in color
-img = cv.imread('Sign6.webp')
+img = cv.imread("Sign6.webp")
 assert img is not None, "file could not be read, check with os.path.exists()"
 
 # Convert to HSV
@@ -51,11 +51,17 @@ mask_yellow1 = cv.inRange(hsv, lower_yellow1, upper_yellow1)
 mask_yellow2 = cv.inRange(hsv, lower_yellow2, upper_yellow2)
 mask_yellow = cv.bitwise_or(mask_yellow1, mask_yellow2)
 
+# Apply erosion to remove noise
+erodeRed = cv.erode(mask_red, None, iterations=2)
+erodeYellow = cv.erode(mask_yellow, None, iterations=2)
+erodeGreen = cv.erode(mask_green, None, iterations=2)
+erodeBlue = cv.erode(mask_blue, None, iterations=2)
+
 # Apply masks to original image
-result_red = cv.bitwise_and(img, img, mask=mask_red)
-result_green = cv.bitwise_and(img, img, mask=mask_green)
-result_blue = cv.bitwise_and(img, img, mask=mask_blue)
-result_yellow = cv.bitwise_and(img, img, mask=mask_yellow)
+result_red = cv.bitwise_and(img, img, mask=erodeRed)
+result_green = cv.bitwise_and(img, img, mask=erodeGreen)
+result_blue = cv.bitwise_and(img, img, mask=erodeBlue)
+result_yellow = cv.bitwise_and(img, img, mask=erodeYellow)
 
 # Convert results to grayscale for further processing
 gray_red = cv.cvtColor(result_red, cv.COLOR_BGR2GRAY)
@@ -64,18 +70,18 @@ gray_blue = cv.cvtColor(result_blue, cv.COLOR_BGR2GRAY)
 gray_yellow = cv.cvtColor(result_yellow, cv.COLOR_BGR2GRAY)
 
 plt.subplot(2, 3, 1), plt.imshow(cv.cvtColor(img, cv.COLOR_BGR2RGB))
-plt.title('Original'), plt.xticks([]), plt.yticks([])
+plt.title("Original"), plt.xticks([]), plt.yticks([])
 
 plt.subplot(2, 3, 2), plt.imshow(cv.cvtColor(result_red, cv.COLOR_BGR2RGB))
-plt.title('Red'), plt.xticks([]), plt.yticks([])
+plt.title("Red"), plt.xticks([]), plt.yticks([])
 
 plt.subplot(2, 3, 3), plt.imshow(cv.cvtColor(result_green, cv.COLOR_BGR2RGB))
-plt.title('Green'), plt.xticks([]), plt.yticks([])
+plt.title("Green"), plt.xticks([]), plt.yticks([])
 
 plt.subplot(2, 3, 4), plt.imshow(cv.cvtColor(result_blue, cv.COLOR_BGR2RGB))
-plt.title('Blue'), plt.xticks([]), plt.yticks([])
+plt.title("Blue"), plt.xticks([]), plt.yticks([])
 
 plt.subplot(2, 3, 5), plt.imshow(cv.cvtColor(result_yellow, cv.COLOR_BGR2RGB))
-plt.title('Yellow'), plt.xticks([]), plt.yticks([])
+plt.title("Yellow"), plt.xticks([]), plt.yticks([])
 
 plt.show()
