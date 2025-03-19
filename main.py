@@ -63,6 +63,23 @@ result_green = cv.bitwise_and(img, img, mask=erodeGreen)
 result_blue = cv.bitwise_and(img, img, mask=erodeBlue)
 result_yellow = cv.bitwise_and(img, img, mask=erodeYellow)
 
+# Find and draw contours for each color
+img_with_boxes = img.copy()
+
+def draw_boxes(mask, color):
+    contours, _ = cv.findContours(mask, cv.RETR_EXTERNAL, cv.CHAIN_APPROX_SIMPLE)
+    for cnt in contours:
+        area = cv.contourArea(cnt)
+        if area > 2500:  # Filter small contours
+            x, y, w, h = cv.boundingRect(cnt)
+            cv.rectangle(img_with_boxes, (x, y), (x + w, y + h), color, 5)
+
+# Draw boxes for each color
+draw_boxes(erodeRed, (0, 0, 255))      # Red
+draw_boxes(erodeBlue, (255, 0, 0))     # Blue
+draw_boxes(erodeGreen, (0, 255, 0))    # Green
+draw_boxes(erodeYellow, (0, 255, 255)) # Yellow
+
 # Determine types of signals present
 tipos_senales = []
 threshold_area = 5000  # Minimum number of pixels to consider the presence of color
