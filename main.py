@@ -57,16 +57,16 @@ mask_yellow2 = cv.inRange(hsv, lower_yellow2, upper_yellow2)
 mask_yellow = cv.bitwise_or(mask_yellow1, mask_yellow2)
 
 # Apply erosion to remove noise
-erodeRed = cv.erode(mask_red, None, iterations=2)
-erodeYellow = cv.erode(mask_yellow, None, iterations=2)
-erodeGreen = cv.erode(mask_green, None, iterations=2)
-erodeBlue = cv.erode(mask_blue, None, iterations=2)
+erode_red = cv.erode(mask_red, None, iterations=2)
+erode_yellow = cv.erode(mask_yellow, None, iterations=2)
+erode_green = cv.erode(mask_green, None, iterations=2)
+erode_blue = cv.erode(mask_blue, None, iterations=2)
 
 # Apply masks to original image to get only the specific color
-result_red = cv.bitwise_and(img, img, mask=erodeRed)
-result_green = cv.bitwise_and(img, img, mask=erodeGreen)
-result_blue = cv.bitwise_and(img, img, mask=erodeBlue)
-result_yellow = cv.bitwise_and(img, img, mask=erodeYellow)
+result_red = cv.bitwise_and(img, img, mask=erode_red)
+result_green = cv.bitwise_and(img, img, mask=erode_green)
+result_blue = cv.bitwise_and(img, img, mask=erode_blue)
+result_yellow = cv.bitwise_and(img, img, mask=erode_yellow)
 
 # Find and draw contours for each color
 img_with_boxes = img.copy()
@@ -82,19 +82,21 @@ def draw_boxes(mask, color):
 
 
 # Draw boxes for each color
-draw_boxes(erodeRed, (0, 0, 255))  # Red
-draw_boxes(erodeBlue, (255, 0, 0))  # Blue
-draw_boxes(erodeGreen, (0, 255, 0))  # Green
-draw_boxes(erodeYellow, (0, 255, 255))  # Yellow
+draw_boxes(erode_red, (0, 0, 255))  # Red
+draw_boxes(erode_blue, (255, 0, 0))  # Blue
+draw_boxes(erode_green, (0, 255, 0))  # Green
+draw_boxes(erode_yellow, (0, 255, 255))  # Yellow
 
 # Determine types of signals present
 types_signs = []
 threshold_area = 5000  # Minimum number of pixels to consider the presence of color
 
+
 #  Checks if there is enough presence of a color in the image.
 def check_color_presence(result_img):
     gray = cv.cvtColor(result_img, cv.COLOR_BGR2GRAY)
     return np.count_nonzero(gray) > threshold_area
+
 
 # Check presence of each color
 if check_color_presence(result_red):
@@ -105,13 +107,13 @@ if check_color_presence(result_blue):
     types_signs.append("Servicios (Azul)")
 if check_color_presence(result_green):
     types_signs.append("Destino (Verde)")
-    
+
 # Prints the classification results.
 print("\nClasificación de señales detectadas:")
 for type in types_signs:
     print("- " + type)
 
- # Show original image
+# Show original image
 plt.subplot(2, 3, 1), plt.imshow(cv.cvtColor(img, cv.COLOR_BGR2RGB))
 plt.title("Original"), plt.xticks([]), plt.yticks([])
 
