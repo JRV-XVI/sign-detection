@@ -63,11 +63,26 @@ result_green = cv.bitwise_and(img, img, mask=erodeGreen)
 result_blue = cv.bitwise_and(img, img, mask=erodeBlue)
 result_yellow = cv.bitwise_and(img, img, mask=erodeYellow)
 
-# Convert results to grayscale for further processing
-gray_red = cv.cvtColor(result_red, cv.COLOR_BGR2GRAY)
-gray_green = cv.cvtColor(result_green, cv.COLOR_BGR2GRAY)
-gray_blue = cv.cvtColor(result_blue, cv.COLOR_BGR2GRAY)
-gray_yellow = cv.cvtColor(result_yellow, cv.COLOR_BGR2GRAY)
+# Determine types of signals present
+tipos_senales = []
+threshold_area = 5000  # Minimum number of pixels to consider the presence of color
+
+def check_color_presence(result_img):
+    gray = cv.cvtColor(result_img, cv.COLOR_BGR2GRAY)
+    return np.count_nonzero(gray) > threshold_area
+
+if check_color_presence(result_red):
+    tipos_senales.append("Restrictiva (Rojo)")
+if check_color_presence(result_yellow):
+    tipos_senales.append("Preventiva (Amarillo)")
+if check_color_presence(result_blue):
+    tipos_senales.append("Servicios (Azul)")
+if check_color_presence(result_green):
+    tipos_senales.append("Destino (Verde)")
+
+print("\nClasificación de señales detectadas:")
+for tipo in tipos_senales:
+  print("- " + tipo)
 
 plt.subplot(2, 3, 1), plt.imshow(cv.cvtColor(img, cv.COLOR_BGR2RGB))
 plt.title("Original"), plt.xticks([]), plt.yticks([])
