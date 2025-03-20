@@ -60,3 +60,7 @@ Para que un color se clasifique como una señal válida, el área detectada debe
 
 ```python
 threshold_area = 5000  # Número mínimo de píxeles para considerar la presencia de color
+```
+
+## ⚠️ **Restricciones y Limitaciones**
+Una limitación importante es que el programa **solo utiliza el color** para detectar señales, lo que puede generar falsos positivos si el fondo de la imagen o algún objeto tiene un color similar al de las señales.
