@@ -65,13 +65,13 @@ El programa clasifica las señales en cuatro categorías según su color predomi
 
 ## 🧪 Orden de los filtros aplicados
 1. **Creación de máscaras por rango de color**
-2. **Erosión para reducir el ruido**
-3. **Dilatación para restaurar objetos principales**
-4. **Aplicación de las máscaras a la imagen original**
+2. **Aplicación de las máscaras a la imagen original**
+3. **Erosión para reducir el ruido**
+4. **Dilatación para restaurar objetos principales**
 5. **Detección de contornos y clasificación**
 
 ## ⚠️ Restricciones y limitaciones
-- El programa **solo utiliza el color** para detectar señales, lo que puede generar falsos positivos si el fondo u otros objetos tienen colores similares a las señales de tráfico
+- El programa **solo utiliza el color** para detectar señales, lo que puede generar falsos positivos si el fondo u otros objetos tienen colores similares a las señales de tráfico y además una proporción de aspecto similar a esta
 - La iluminación y las condiciones ambientales pueden afectar significativamente la detección basada en color
 - El umbral de área (5000 píxeles) podría necesitar ajustes según el tamaño de la imagen y la distancia a las señales
 
